@@ -2,12 +2,13 @@
 # nombre de hotkey1
 # vitesse de jeu
 
-import csv
+
+from sklearn import tree
+
+#X = [[0, 0], [1, 1]]
+#Y = [0, 1]
+#clf = tree.DecisionTreeClassifier()
+#clf = clf.fit(X, Y)
 
 
-arrayOfData  = []
-with open('../../datayasp/train.csv') as csvfile:
-	reader = csv.reader(csvfile, delimiter=',')
-	for row in reader:
-		arrayOfData.append(row)
-	print arrayOfData[2]
+
