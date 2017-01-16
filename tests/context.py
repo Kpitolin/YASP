@@ -3,4 +3,4 @@ import sys
 
 sys.path.insert(0, os.path.abspath('..'))
 
-from yasp import firstPredictor
+from yasp import firstPredictor, csvHandler
