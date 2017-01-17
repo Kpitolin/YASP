@@ -1,11 +1,12 @@
 import csv
-
+from sklearn import tree
+import csvHandler
 # Handles all kinds of operations for CSV files
 
 def extractLabels(rows):
-"""
-Utils methods to extract labels out of the training set
-"""
+	"""
+	Utils methods to extract labels out of the training set
+	"""
 	rows = rows[1:]
 	arrayOfLabels  = []
 	i = 0
@@ -15,9 +16,9 @@ Utils methods to extract labels out of the training set
 	return arrayOfLabels
 
 def generateResultRows(rows):
-"""
-Format a row to the expect format : rowId, battlenetUrl
-"""
+	"""
+	Format a row to the expect format : rowId, battlenetUrl
+	"""
 	rows = rows[1:]
 	arrayOfLabels  = []
 	i = 0
@@ -47,6 +48,8 @@ def extractRowsFromCSV(filename = '../../datayasp/train.csv'):
 
 # Extracts from the csv each row of data
 fieldnames = ["user","speed","s","sBase","sMineral","hotkey00","hotkey01","hotkey02","hotkey10","hotkey11","hotkey12","hotkey20","hotkey21","hotkey22","hotkey30","hotkey31","hotkey32","hotkey40","hotkey41","hotkey42","hotkey50","hotkey51","hotkey52","hotkey60","hotkey61","hotkey62","hotkey70","hotkey71","hotkey72","hotkey80","hotkey81","hotkey82","hotkey90","hotkey91","hotkey92"]
+
+
 def generate_features_csv():
 	"""
 	 generate_features_csv
@@ -72,9 +75,9 @@ def generate_features_csv():
 
 def generate_features_array(array):
 	"""
-	 generate_features_csv
-	 This method count the number of each specific action for every game and the speed of the player
-	 It creates a new csv
+	generate_features_csv
+	This method count the number of each specific action for every game and the speed of the player
+	It creates a new csv
 	"""
 
 	with open('../../datayasp/train_count.csv', 'w') as csv_output:
@@ -92,9 +95,9 @@ def generate_features_array(array):
 
 def generate_features_lists():
 	"""
-		 generate_features_lists
-		 This method read the csv and create a list with the layer and a list with the features
-		"""
+	generate_features_lists
+	This method read the csv and create a list with the layer and a list with the features
+	"""
 
 	players = []
 	features = []
@@ -106,6 +109,7 @@ def generate_features_lists():
 			features.append(row[1:len(row)])
 			print(players[-1])
 			print(features[-1])
+
 	return {"players":players,"features":features}
 
 
@@ -171,8 +175,11 @@ def writeToSubmitCSV(arrayOfResults):
 if __name__ == "__main__":
 	# generate_features_csv()
 	# generate_features_lists()
+
+
+
 	# print extractLabels(extractRowsFromCSV())	testArray = [["row ID","battleneturl"], ["Row 0", "Patrick"], ["Row 1", "Bernard"], ["Row 2", "Jean"]]
-	truthArray = [["row ID","battleneturl"], ["Row 0", "Patrick"], ["Row 1", "Patrick"], ["Row 2", "Jean"],["Row 3", "Bernard"]]
-	print computePrecisionAndRecall(testArray, truthArray)
-	#print extractRowsFromCSV()
+	# truthArray = [["row ID","battleneturl"], ["Row 0", "Patrick"], ["Row 1", "Patrick"], ["Row 2", "Jean"],["Row 3", "Bernard"]]
+	# print computePrecisionAndRecall(testArray, truthArray)
+	print extractRowsFromCSV()
 

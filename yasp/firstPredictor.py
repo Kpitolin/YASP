@@ -12,14 +12,18 @@ import csvHandler
 # clf = clf.fit(X, Y)
 # clf.predict([[2., 2.]])
 
-
-features_list = csvHandler.generate_features_list()
+csvHandler.generate_features_csv()
+features_list = csvHandler.generate_features_lists()
 labels = csvHandler.extractLabels(csvHandler.extractRowsFromCSV())
-toPredict = csvHandler.generate_features_array(csvHandler.extractRowsFromCSV()[2][1:])
 
 clf = tree.DecisionTreeClassifier()
 
-print features_list[0]
-print labels[0]
-# clf = clf.fit(features_list, labels)
-# clf.predict(toPredict)
+ 
+csvHandler.generate_features_array(csvHandler.extractRowsFromCSV()[2][1:])
+toPredict = csvHandler.generate_features_lists()
+
+clf = clf.fit(features_list, labels)
+clf.predict(toPredict)
+
+# print features_list[0]
+# print labels[0]
