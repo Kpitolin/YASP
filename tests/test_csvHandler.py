@@ -23,8 +23,8 @@ class csvHandlerTestCase(unittest.TestCase):
 	# # If the event occured at the current minute, we consider it
 	def test_computePrecisionAndRecall_same_count(self):
 		testArray = [["row ID","battleneturl"], ["Row 0", "Patrick"], ["Row 1", "Bernard"], ["Row 2", "Jean"],["Row 3", "Jean"]]
-		truthArray = [["row ID","battleneturl"], ["Row 0", "Patrick"], ["Row 1", "Patrick"], ["Row 2", "Jean"],["Row 3", "Bernard"]]
-		self.assertEqual(yasp.csvHandler.computePrecisionAndRecall(testArray,truthArray),{"precision": 1/4,"recall": 1/4})
+		truthArray = [["row ID","battleneturl"], ["Row 0", "Patrick"], ["Row 1", "Patrick"], ["Row 2", "Jean"],["Row 3", "Bernard"], ["Row 4", "popo"]]
+		self.assertEqual(yasp.csvHandler.computePrecisionAndRecall(testArray,truthArray),{"precision": 1/4,"recall": 2/5})
 
 	# # If the event occured at the current minute, we consider it
 	# def test_computePrecisionAndRecall_same_count(self):

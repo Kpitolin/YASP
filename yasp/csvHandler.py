@@ -2,12 +2,46 @@ import csv
 
 # Handles all kinds of operations for CSV files
 
+def extractLabels(rows):
+"""
+Utils methods to extract labels out of the training set
+"""
+	rows = rows[1:]
+	arrayOfLabels  = []
+	i = 0
+	for row in rows:
+		arrayOfLabels.append(row[0])
+		i = i+1
+	return arrayOfLabels
+
+def generateResultRows(rows):
+"""
+Format a row to the expect format : rowId, battlenetUrl
+"""
+	rows = rows[1:]
+	arrayOfLabels  = []
+	i = 0
+	for row in rows:
+		arrayOfLabels.append(["Row"+str(i), row[0]])
+		i = i+1
+	return arrayOfLabels
+
+
 def extractRowsFromCSV(filename = '../../datayasp/train.csv'):
+	"""
+	Training CSV - > [['battleneturl',['s',17, ...]],...]
+	"""
 	arrayOfData  = []
+
 	with open(filename) as csvfile:
-		reader = csv.reader(csvfile, delimiter=',')
+		reader = csv.reader(csvfile, delimiter=';')
 		for row in reader:
 			arrayOfData.append(row)
+
+		i = 0
+		for i in range(0,len(arrayOfData)):
+			arrayOfActions = arrayOfData[i][1].split(',')
+			arrayOfData[i][1]= arrayOfActions
 	return arrayOfData
 
 
@@ -34,6 +68,26 @@ def generate_features_csv():
 						features_map["speed"] = len(row)-1/2*(int(row[-1]) - int(row[2]))
 						features_map["user"] = row[0].split(";")[0]
 				writer.writerow(features_map)
+
+
+def generate_features_array(array):
+	"""
+	 generate_features_csv
+	 This method count the number of each specific action for every game and the speed of the player
+	 It creates a new csv
+	"""
+
+	with open('../../datayasp/train_count.csv', 'w') as csv_output:
+		writer = csv.DictWriter(csv_output, fieldnames=fieldnames,dialect='excel')
+		features_map = {}
+		writer.writeheader()
+		for row in array:
+			for field in fieldnames:
+				if len(row)>2:
+					features_map[field] = row.count(field)
+					features_map["speed"] = len(row)-1/2*(int(row[-1]) - int(row[2]))
+					features_map["user"] = row[0].split(";")[0]
+			writer.writerow(features_map)
 
 
 def generate_features_lists():
@@ -96,7 +150,7 @@ def computePrecisionAndRecall(testArray, truthArray):
 		truth_index = truth_index - 1
 
 		prediction_index = prediction_index + 1
-	truth_index = truth_index + 1
+		truth_index = truth_index + 1
 
 	
 	return {"precision": tp/testArrayCount, "recall":  tp/truthArrayCount}
@@ -115,6 +169,10 @@ def writeToSubmitCSV(arrayOfResults):
 
 
 if __name__ == "__main__":
-
-	generate_features_lists()
+	# generate_features_csv()
+	# generate_features_lists()
+	# print extractLabels(extractRowsFromCSV())	testArray = [["row ID","battleneturl"], ["Row 0", "Patrick"], ["Row 1", "Bernard"], ["Row 2", "Jean"]]
+	truthArray = [["row ID","battleneturl"], ["Row 0", "Patrick"], ["Row 1", "Patrick"], ["Row 2", "Jean"],["Row 3", "Bernard"]]
+	print computePrecisionAndRecall(testArray, truthArray)
+	#print extractRowsFromCSV()
 
