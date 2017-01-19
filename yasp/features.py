@@ -6,7 +6,14 @@ def extract_race_feature(raw_features):
 	"""
 	feature_list = []
 	for i in range(0,len(raw_features)):
-		feature_list.append(len(raw_features[i][0]))
+		if raw_features[i][0] == "Protoss":
+			feature_list.append(0)
+
+		elif raw_features[i][0] == "Zerg":
+			feature_list.append(1)
+
+		elif raw_features[i][0] == "Terran":
+			feature_list.append(2)
 
 	return feature_list
 
@@ -17,7 +24,6 @@ def add_single_feature(data, single_feature_list):
 
 	for i in range(0,len(single_feature_list)):
 		data[i].append(single_feature_list[i])
-
 	return data
 
 def add_multiple_features(data, multiple_features_list, default_value = 0):
@@ -141,7 +147,7 @@ def compute_repetition_pattern_of_hotkeys_feature():
 fieldnames = ["s","sBase","sMineral","hotkey00","hotkey01","hotkey02","hotkey10","hotkey11","hotkey12","hotkey20","hotkey21","hotkey22","hotkey30","hotkey31","hotkey32","hotkey40","hotkey41","hotkey42","hotkey50","hotkey51","hotkey52","hotkey60","hotkey61","hotkey62","hotkey70","hotkey71","hotkey72","hotkey80","hotkey81","hotkey82","hotkey90","hotkey91","hotkey92"]
 
 
-def calculate_simple_features(data, offset = 0):
+def calculate_simple_features(data):
 
 	"""
 	Doesn't compute speed anymore
@@ -150,9 +156,9 @@ def calculate_simple_features(data, offset = 0):
 	for game in data:
 		if game:
 			game_features = []
-			if game[0+offset] == "Protoss": 
+			if game[0] == "Protoss": 
 				game_features.append(0)
-			elif game[0+offset] == "Zerg": 
+			elif game[0] == "Zerg": 
 				game_features.append(1)
 			else : 
 				game_features.append(2)

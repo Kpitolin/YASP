@@ -19,7 +19,7 @@ def extract_first_20_second_rows_from_data(raw_data):
 
 	for user_data in raw_data:
 		selected_data  = []
-
+		selected_data.append(user_data[0])
 		for i in range(2,len(user_data)):
 			if i%2 == 0 and int(user_data[i]) < 600 :
 				selected_data.append(user_data[i-1])

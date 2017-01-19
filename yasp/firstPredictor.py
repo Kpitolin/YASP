@@ -8,6 +8,8 @@ import random_tree_predictor_by_race
 from sklearn.ensemble import RandomForestClassifier
 
 #from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import cross_val_score
+
 from sklearn.metrics import accuracy_score, jaccard_similarity_score, f1_score
 from sklearn.tree import DecisionTreeClassifier
 fieldnames = ["s","sBase","sMineral","hotkey00","hotkey01","hotkey02","hotkey10","hotkey11","hotkey12","hotkey20","hotkey21","hotkey22","hotkey30","hotkey31","hotkey32","hotkey40","hotkey41","hotkey42","hotkey50","hotkey51","hotkey52","hotkey60","hotkey61","hotkey62","hotkey70","hotkey71","hotkey72","hotkey80","hotkey81","hotkey82","hotkey90","hotkey91","hotkey92"]
@@ -62,13 +64,9 @@ def test_with_new_features(n_estimators_rf = 50):
 
 	features_list = csvHandler.extract_rows_from_CSV()
 	first_twenty_seconds_fl = csvHandler.extract_first_20_second_rows_from_data(features_list["data"])
-
 	raw_data = features.calculate_simple_features(first_twenty_seconds_fl)
 	features.add_multiple_features(raw_data, features.compute_hotkeys_distribution_feature(features_list["data"]))
-	# print len(raw_data)
-	csvHandler.generate_features_csv(features_list["labels"], raw_data)
-	csvHandler.generate_features_csv(features_list["labels"], features_list["data"])
-	# print len(features_list["data"])
+
 	features.add_single_feature(raw_data, features.extract_string_feature(features_list["data"],"sBase"))
 	features.add_single_feature(raw_data, features.extract_string_feature(features_list["data"],"sMineral"))
 	features.add_single_feature(raw_data, features.extract_race_feature(features_list["data"]))
@@ -77,17 +75,16 @@ def test_with_new_features(n_estimators_rf = 50):
 
 	#features_labels = extract_rows_from_CSV()
 	Y = features_list["labels"]
-	X = data_hotkeys
+	X = raw_data
 
 
 	X_train, X_test, Y_train, Y_test = train_test_split(X,Y, test_size = 5, random_state=int(random.uniform(0,100)))
 
 	clf = RandomForestClassifier(n_estimators=n_estimators_rf)
 	clf = clf.fit(X_train, Y_train)
-	data_test = csvHandler.extract_rows_from_CSV('../../datayasp/train.csv')["data"][:400]
+	data_test = csvHandler.extract_rows_from_CSV('../../datayasp/test.csv')["data"]
 
-
-	data_labels = csvHandler.extract_rows_from_CSV('../../datayasp/train.csv')["labels"][:400]
+	data_labels = csvHandler.extract_rows_from_CSV('../../datayasp/test.csv')["labels"]
 
 	features_test = features.compute_hotkeys_distribution_feature(data_test)
 	features.add_single_feature(features_test, features.extract_string_feature(data_test,"sBase"))
@@ -98,8 +95,8 @@ def test_with_new_features(n_estimators_rf = 50):
 	predictions = clf.predict(X_test)
 	#write_to_submit_CSV(players_test,predictions)
 	#print f1_score(Y_test, predictions, labels=[x for x in range(0,400)], average= 'macro')
-	#print accuracy_score(Y_test, predictions)
-	print jaccard_similarity_score(Y_test, predictions)
+	print "Accuracy: " + str(cross_val_score(clf,X_test,Y_test))
+	print "Jacquart: " + str(jaccard_similarity_score(Y_test, predictions))
 
 
 
@@ -138,7 +135,7 @@ if __name__ == "__main__":
 	test_with_new_features(80)
 	# print "random_tree_predictor_by_race"
 	# random_tree_predictor_by_race.test_random_tree_by_race()
-	features_list = csvHandler.extract_rows_from_CSV()
+	# features_list = csvHandler.extract_rows_from_CSV()
 
 
 	# features.compute_user_mean_speed_feature(features_list["data"])
