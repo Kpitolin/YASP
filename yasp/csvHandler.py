@@ -37,16 +37,6 @@ def generate_features_csv(labels, features):
 		for i in range(len(labels)):
 			writer.writerow([labels[i]]+features[i])
 
-def writeToSubmitCSV(rows, labels):
-	"""
-	Writes the submit  CSV
-	"""
-	with open('../../datayasp/results.csv', 'wb') as csvfile:
-		writer = csv.writer(csvfile, delimiter=',')
-		writer.writerow(['row ID','battleneturl'])
-		for array in arrayOfResults:
-			writer.writerow(array)
-
 def write_to_submit_CSV(players,arrayOfResults):
 	"""
 	Writes the submit  CSV

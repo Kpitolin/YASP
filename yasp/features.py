@@ -76,14 +76,22 @@ def compute_hotkeys_distribution_feature(list_of_feature_list):
 # The following methods were not tested
 
 	
-def compute_user_mean_speed_feature(feature_list):
+def compute_user_mean_speed_feature(raw_features):
 	"""
 	Compute user speed
 
 	Format of list [action1,frame1, ...]
 	Returns a float with the mean speed
 	"""
-	return len(feature_list)-1/2*(int(feature_list[-1]) - int(feature_list[2]))
+	features = []
+
+	for feature_list in raw_features:
+		if len(feature_list)>2:
+			features.append((int(feature_list[-1]) - int(feature_list[2]))/2*(len(feature_list)-1))
+		else:
+			features.append(0)
+
+	return features
 
 
 def compute_repetition_pattern_of_hotkeys_feature():
@@ -91,6 +99,29 @@ def compute_repetition_pattern_of_hotkeys_feature():
 	Repetition pattern of hotkeys
 	"""
 	return
+
+
+fieldnames = ["s","sBase","sMineral","hotkey00","hotkey01","hotkey02","hotkey10","hotkey11","hotkey12","hotkey20","hotkey21","hotkey22","hotkey30","hotkey31","hotkey32","hotkey40","hotkey41","hotkey42","hotkey50","hotkey51","hotkey52","hotkey60","hotkey61","hotkey62","hotkey70","hotkey71","hotkey72","hotkey80","hotkey81","hotkey82","hotkey90","hotkey91","hotkey92"]
+
+
+def calculate_simple_features(data):
+	features = []
+	for game in data:
+		game_features = []
+		if game[0] == "Protoss": 
+			game_features.append(0)
+		elif game[0] == "Zerg": 
+			game_features.append(1)
+		else : 
+			game_features.append(2)
+		if len(game)>3:
+			game_features.append((int(game[-1]) - int(game[2]))/2*(len(game)-1))
+		else: 
+			game_features.append(0)
+		for field in fieldnames:
+			game_features.append(game.count(field))
+		features.append(game_features)
+	return features
 
 if __name__ == "__main__":
 
