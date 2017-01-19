@@ -20,6 +20,17 @@ def add_single_feature(data, single_feature_list):
 
 	return data
 
+def add_multiple_features(data, multiple_features_list):
+	"""
+	Add a feature  [valueGameData1, valueGameData2,...] to the list of features
+	"""
+
+	for i in range(0,len(multiple_features_list)):
+		for j in range(0,len(multiple_features_list[i])):
+			data[i].append(multiple_features_list[i][j])
+
+	return data
+
 def extract_string_feature(data_list, string_feature):
 	"""
 	You must provide extract_rows_from_CSV()["data"] as data_list 
@@ -73,7 +84,16 @@ def compute_hotkeys_distribution_feature(list_of_feature_list):
 
 	return list_of_hotkey_dict
 
-# The following methods were not tested
+def findIndexOfFirstFrame(game_feature_list):
+
+	"""
+	If the first frame is found, it resturns its index, otherwise, -1
+	"""
+	for i in range(len(game_feature_list)):
+		if isinstance(game_feature_list[i], int):
+			return i
+
+	return -1
 
 	
 def compute_user_mean_speed_feature(raw_features):
@@ -81,13 +101,15 @@ def compute_user_mean_speed_feature(raw_features):
 	Compute user speed
 
 	Format of list [action1,frame1, ...]
-	Returns a float with the mean speed
+	Returns a float with the mean speed or 0 if computation is impossible
 	"""
 	features = []
 
 	for feature_list in raw_features:
-		if len(feature_list)>2:
-			features.append((int(feature_list[-1]) - int(feature_list[2]))/2*(len(feature_list)-1))
+		index_first_frame = findIndexOfFirstFrame(feature_list)
+
+		if len(feature_list)>2 and not index_first_frame == -1:
+			features.append((int(feature_list[-1]) - int(feature_list[index_first_frame]))/2*(len(feature_list)-1))
 		else:
 			features.append(0)
 
@@ -133,4 +155,4 @@ def add_line_number(features):
 
 if __name__ == "__main__":
 
-	print compute_hotkeys_distribution_feature([["hotkey22", "hotkey22"], ["hotkey32", "hotkey42"], ["hotkey62", "hotkey92"]])
+	print compute_user_mean_speed_feature([["/Life/", "Zerg", 17, "s",18,	"s",21,	"s",22,	"hotkey50",	24,	"s",29,	"hotkey40",	30,	"hotkey52",	33]])

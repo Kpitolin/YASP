@@ -21,6 +21,7 @@ def produce_new_test():
 	features_list = csvHandler.extract_rows_from_CSV()
 	data_hotkeys = features.compute_hotkeys_distribution_feature(features_list["data"])
 
+
 	features.add_single_feature(data_hotkeys, features.extract_string_feature(features_list["data"],"sBase"))
 	features.add_single_feature(data_hotkeys, features.extract_string_feature(features_list["data"],"sMineral"))
 	features.add_single_feature(data_hotkeys, features.extract_race_feature(features_list["data"]))
@@ -58,13 +59,16 @@ def produce_new_test():
 def test_with_new_features(n_estimators_rf = 50):
 
 
-	features_list = csvHandler.extract_rows_from_CSV()
-	data_hotkeys = features.compute_hotkeys_distribution_feature(features_list["data"])
 
-	features.add_single_feature(data_hotkeys, features.extract_string_feature(features_list["data"],"sBase"))
-	features.add_single_feature(data_hotkeys, features.extract_string_feature(features_list["data"],"sMineral"))
-	features.add_single_feature(data_hotkeys, features.extract_race_feature(features_list["data"]))
-	features.add_single_feature(data_hotkeys, features.compute_user_mean_speed_feature(features_list["data"]))
+	features_list = csvHandler.extract_rows_from_CSV()
+	first_twenty_seconds_fl = csvHandler.extract_first_20_second_rows_from_data(features_list["data"])
+
+	raw_data = features.calculate_simple_features(first_twenty_seconds_fl)
+	features.add_multiple_features(raw_data, features.compute_hotkeys_distribution_feature(features_list["data"]))
+	features.add_single_feature(raw_data, features.extract_string_feature(features_list["data"],"sBase"))
+	features.add_single_feature(raw_data, features.extract_string_feature(features_list["data"],"sMineral"))
+	features.add_single_feature(raw_data, features.extract_race_feature(features_list["data"]))
+	features.add_single_feature(raw_data, features.compute_user_mean_speed_feature(features_list["data"]))
 
 
 	#features_labels = extract_rows_from_CSV()
@@ -128,8 +132,9 @@ if __name__ == "__main__":
 	test_with_new_features(50)	
 	print "New 80"
 	test_with_new_features(80)
-	print "random_tree_predictor_by_race"
-	random_tree_predictor_by_race.test_random_tree_by_race()
-	# features_list = csvHandler.extract_rows_from_CSV()
+	# print "random_tree_predictor_by_race"
+	# random_tree_predictor_by_race.test_random_tree_by_race()
+	features_list = csvHandler.extract_rows_from_CSV()
+
 
 	# features.compute_user_mean_speed_feature(features_list["data"])
