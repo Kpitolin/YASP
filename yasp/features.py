@@ -20,6 +20,17 @@ def add_single_feature(data, single_feature_list):
 
 	return data
 
+def add_multiple_features(data, multiple_features_list):
+	"""
+	Add a feature  [valueGameData1, valueGameData2,...] to the list of features
+	"""
+
+	for i in range(0,len(multiple_features_list)):
+		for j in range(0,len(multiple_features_list[i])):
+			data[i].append(multiple_features_list[i][j])
+
+	return data
+
 def extract_string_feature(data_list, string_feature):
 	"""
 	You must provide extract_rows_from_CSV()["data"] as data_list 

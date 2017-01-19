@@ -5,6 +5,29 @@ import csvHandler
 
 fieldresults = ["row ID" , "battleneturl"]
 
+
+
+
+def extract_first_20_second_rows_from_data(raw_data):
+	"""
+	Takes extract_rows_from_CSV()["data"] in input
+	"""
+
+	data_array  = []
+
+
+	for user_data in raw_data:
+		selected_data  = []
+
+		for i in range(2,len(user_data)):
+			if i%2 == 0 and int(user_data[i]) < 600 :
+				selected_data.append(user_data[i-1])
+				selected_data.append(user_data[i])
+		data_array.append(selected_data)
+
+			
+	return data_array
+
 def extract_rows_from_CSV(filename = '../../datayasp/train.csv', filterIncompleteRows = True):
 	"""
 	Training CSV - > label_array:['gamer1','gamer2...]
