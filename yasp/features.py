@@ -106,6 +106,7 @@ fieldnames = ["s","sBase","sMineral","hotkey00","hotkey01","hotkey02","hotkey10"
 
 def calculate_simple_features(data):
 	features = []
+	i=0
 	for game in data:
 		game_features = []
 		if game[0] == "Protoss": 
@@ -115,13 +116,20 @@ def calculate_simple_features(data):
 		else : 
 			game_features.append(2)
 		if len(game)>3:
-			game_features.append((int(game[-1]) - int(game[2]))/2*(len(game)-1))
+			game_features.append((int(game[-1]) - int(game[2]))/(2*(len(game)-1)))
 		else: 
 			game_features.append(0)
 		for field in fieldnames:
 			game_features.append(game.count(field))
+		game_features.append(i)
+		i=i+1	
 		features.append(game_features)
 	return features
+
+
+def add_line_number(features):
+	for i in range(len(features)):
+		features[i].append(i)
 
 if __name__ == "__main__":
 

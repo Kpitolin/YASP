@@ -17,7 +17,7 @@ from sklearn.ensemble import ExtraTreesClassifier
 
 features_labels = extract_rows_from_CSV()
 Y = features_labels["labels"]
-X = calculateFeatures(features_labels["data"])
+X = calculate_simple_features(features_labels["data"])
 generate_features_csv(Y,X)
 
 
@@ -26,7 +26,7 @@ X_train, X_test, Y_train, Y_test = train_test_split(X,Y, test_size = 5)
 clf = RandomForestClassifier(n_estimators=50)
 clf = clf.fit(X, Y)
 data_test = extract_rows_from_CSV('../../datayasp/test.csv')
-X_test = calculateFeatures(data_test["data"])
+X_test = calculate_simple_features(data_test["data"])
 Y_test = data_test["labels"]
 predictions = clf.predict(X_test)
 write_to_submit_CSV(Y_test,predictions)

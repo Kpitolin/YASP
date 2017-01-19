@@ -31,15 +31,13 @@ def predict_race(features, dic, predictions):
 	predictions=predictions.append(predicted_race[0])
 
 
-
-
 def produce_random_tree_by_race():
 	features_labels = extract_rows_from_CSV()
 	Y = features_labels["labels"]
 	X = calculate_simple_features(features_labels["data"])
 	dic = split_train_data(X,Y)
 	train_splitted_data(dic)
-	data_test = extract_rows_from_CSV('../../datayasp/test.csv')
+	data_test = extract_rows_from_CSV('../../datayasp/test.csv',  False)
 	X_test = calculate_simple_features(data_test["data"])
 	Y_test = data_test["labels"]
 	predictions = []
@@ -50,16 +48,13 @@ def produce_random_tree_by_race():
 
 def test_random_tree_by_race():
 	features_labels = extract_rows_from_CSV()
-	Y = features_labels["labels"]
 	X = calculate_simple_features(features_labels["data"])
-	dic = split_train_data(X,Y)
-	train_splitted_data(dic)
-	X_train, X_test, Y_train, Y_test = train_test_split(X,Y, test_size = 5, random_state=int(random.uniform(0,100)))
+	print(X)
+	Y = features_labels["labels"]
+	X_train, X_test, Y_train, Y_test = train_test_split(X,Y, test_size = 5, random_state=int(random.uniform(0,100)))	
 
-	data_test = extract_rows_from_CSV('../../datayasp/train.csv')["data"][:800]
-	data_labels = extract_rows_from_CSV('../../datayasp/train.csv')["labels"][:800]
-	X_test = calculate_simple_features(data_test)
-	Y_test = data_labels
+	dic = split_train_data(X_train,Y_train)
+	train_splitted_data(dic)
 	predictions = []
 	for x in X_test:
 		predict_race(x,dic,predictions)
@@ -67,3 +62,4 @@ def test_random_tree_by_race():
 
 
 
+test_random_tree_by_race()
