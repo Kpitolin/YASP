@@ -47,7 +47,7 @@ def extract_rows_from_CSV(filename = '../../datayasp/train.csv', filterIncomplet
 
 
 # Extracts from the csv each row of data
-fieldnames = ["user","race"",speed","s","sBase","sMineral","hotkey00","hotkey01","hotkey02","hotkey10","hotkey11","hotkey12","hotkey20","hotkey21","hotkey22","hotkey30","hotkey31","hotkey32","hotkey40","hotkey41","hotkey42","hotkey50","hotkey51","hotkey52","hotkey60","hotkey61","hotkey62","hotkey70","hotkey71","hotkey72","hotkey80","hotkey81","hotkey82","hotkey90","hotkey91","hotkey92"]
+fieldnames = ["user","race","speed","s","sBase","sMineral","hotkey00","hotkey01","hotkey02","hotkey10","hotkey11","hotkey12","hotkey20","hotkey21","hotkey22","hotkey30","hotkey31","hotkey32","hotkey40","hotkey41","hotkey42","hotkey50","hotkey51","hotkey52","hotkey60","hotkey61","hotkey62","hotkey70","hotkey71","hotkey72","hotkey80","hotkey81","hotkey82","hotkey90","hotkey91","hotkey92", "line"]
 
 
 def generate_features_csv(labels, features):
@@ -58,6 +58,7 @@ def generate_features_csv(labels, features):
 	"""
 	with open('../../datayasp/train_count.csv', 'w') as csv_output:
 		writer = csv.writer(csv_output)
+		writer.writerow(fieldnames)
 		for i in range(len(labels)):
 			writer.writerow([labels[i]]+features[i])
 

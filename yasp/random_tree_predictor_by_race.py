@@ -5,7 +5,7 @@ from features import *
 from  sklearn.cross_validation import train_test_split
 from sklearn.metrics import accuracy_score, jaccard_similarity_score
 
-fieldnames = ["s","sBase","sMineral","hotkey00","hotkey01","hotkey02","hotkey10","hotkey11","hotkey12","hotkey20","hotkey21","hotkey22","hotkey30","hotkey31","hotkey32","hotkey40","hotkey41","hotkey42","hotkey50","hotkey51","hotkey52","hotkey60","hotkey61","hotkey62","hotkey70","hotkey71","hotkey72","hotkey80","hotkey81","hotkey82","hotkey90","hotkey91","hotkey92"]
+fieldnames = ["s","sBase","sMineral","hotkey00","hotkey01","hotkey02","hotkey10","hotkey11","hotkey12","hotkey20","hotkey21","hotkey22","hotkey30","hotkey31","hotkey32","hotkey40","hotkey41","hotkey42","hotkey50","hotkey51","hotkey52","hotkey60","hotkey61","hotkey62","hotkey70","hotkey71","hotkey72","hotkey80","hotkey81","hotkey82","hotkey90","hotkey91","hotkey92", "mostusedhotkey"]
 
 from sklearn.model_selection import cross_val_score
 from sklearn.ensemble import RandomForestClassifier
@@ -49,8 +49,10 @@ def produce_random_tree_by_race():
 def test_random_tree_by_race():
 	features_labels = extract_rows_from_CSV()
 	X = calculate_simple_features(features_labels["data"])
-	print(X)
+	print X
+	compute_most_used_hotkey_feature(X)
 	Y = features_labels["labels"]
+	generate_features_csv(Y,X)
 	X_train, X_test, Y_train, Y_test = train_test_split(X,Y, test_size = 5, random_state=int(random.uniform(0,100)))	
 
 	dic = split_train_data(X_train,Y_train)
@@ -58,8 +60,7 @@ def test_random_tree_by_race():
 	predictions = []
 	for x in X_test:
 		predict_race(x,dic,predictions)
-	print jaccard_similarity_score(Y_test, predictions)
-
+	print accuracy_score(Y_test, predictions)
 
 
 test_random_tree_by_race()
