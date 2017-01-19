@@ -1,5 +1,5 @@
-
-
+import math
+import functools
 def extract_race_feature(raw_features):
 	"""
 	You must provide it with extract_rows_from_CSV()["data"]
@@ -144,6 +144,36 @@ def compute_repetition_pattern_of_hotkeys_feature():
 	return
 
 
+def compute_most_used_hotkey_feature(features):
+	"""
+	Repetition pattern of hotkeys
+	"""
+	for game in features:
+		hotkey = 0
+		max_usage =0
+		for i in range(4,len(game)-1):
+			if i%3 == 0:
+				if max_usage<(game[i]+game[i+1]+game[i+2]):
+					max_usage = game[i]+game[i+1]+game[i+2]
+					hotkey = (i-6)/3
+		game.append(hotkey)
+
+
+def compute_relative_frequency_hotkey_feature(features):
+	"""
+	Repetition pattern of hotkeys
+	"""
+
+	for game in features:
+		sum = reduce((lambda x, y: x + y), game[7::3])
+		for i in range(6,len(game)-1):
+			if sum !=0:
+				game.append(game[i]*100/sum)
+			else :
+				game.append(0)
+
+
+
 fieldnames = ["s","sBase","sMineral","hotkey00","hotkey01","hotkey02","hotkey10","hotkey11","hotkey12","hotkey20","hotkey21","hotkey22","hotkey30","hotkey31","hotkey32","hotkey40","hotkey41","hotkey42","hotkey50","hotkey51","hotkey52","hotkey60","hotkey61","hotkey62","hotkey70","hotkey71","hotkey72","hotkey80","hotkey81","hotkey82","hotkey90","hotkey91","hotkey92"]
 
 
@@ -153,6 +183,7 @@ def calculate_simple_features(data):
 	Doesn't compute speed anymore
 	"""
 	features = []
+	i=0
 	for game in data:
 		if game:
 			game_features = []
@@ -165,7 +196,14 @@ def calculate_simple_features(data):
 			for field in fieldnames:
 				game_features.append(game.count(field))
 			features.append(game_features)
+			i=i+1	
+		features.append(game_features)
 	return features
+
+
+def add_line_number(features):
+	for i in range(len(features)):
+		features[i].append(i)
 
 if __name__ == "__main__":
 
