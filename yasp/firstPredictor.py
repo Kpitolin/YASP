@@ -16,7 +16,7 @@ fieldnames = ["s","sBase","sMineral","hotkey00","hotkey01","hotkey02","hotkey10"
 
 
 
-def produce_new_test():
+def produce_new_test(n_estimators_rf=50):
 
 	features_list = csvHandler.extract_rows_from_CSV()
 	data_hotkeys = features.compute_hotkeys_distribution_feature(features_list["data"])
@@ -34,7 +34,7 @@ def produce_new_test():
 
 
 
-	clf = RandomForestClassifier(n_estimators=50)
+	clf = RandomForestClassifier(n_estimators=n_estimators_rf)
 	clf = clf.fit(X, Y)
 
 
@@ -65,6 +65,10 @@ def test_with_new_features(n_estimators_rf = 50):
 
 	raw_data = features.calculate_simple_features(first_twenty_seconds_fl)
 	features.add_multiple_features(raw_data, features.compute_hotkeys_distribution_feature(features_list["data"]))
+	# print len(raw_data)
+	csvHandler.generate_features_csv(features_list["labels"], raw_data)
+	csvHandler.generate_features_csv(features_list["labels"], features_list["data"])
+	# print len(features_list["data"])
 	features.add_single_feature(raw_data, features.extract_string_feature(features_list["data"],"sBase"))
 	features.add_single_feature(raw_data, features.extract_string_feature(features_list["data"],"sMineral"))
 	features.add_single_feature(raw_data, features.extract_race_feature(features_list["data"]))
@@ -107,7 +111,7 @@ def test_with_classic_features():
 	X = features.calculate_simple_features(features_labels["data"])
 	csvHandler.generate_features_csv(Y,X)
 
-	X_train, X_test, Y_train, Y_test = train_test_split(X,Y, test_size = 5)
+	X_train, X_test, Y_train, Y_test = train_test_split(X,Y, test_size = 5, random_state=int(random.uniform(0,100)))
 
 	clf = tree.DecisionTreeClassifier()
 	clf = clf.fit(X_train, Y_train)

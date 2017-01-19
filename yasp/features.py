@@ -20,14 +20,29 @@ def add_single_feature(data, single_feature_list):
 
 	return data
 
-def add_multiple_features(data, multiple_features_list):
+def add_multiple_features(data, multiple_features_list, default_value = 0):
 	"""
-	Add a feature  [valueGameData1, valueGameData2,...] to the list of features
+	The first value must have the right number of features
+	Add a feature  [valueGameData1, valueGameData2,...] to the list of features or default value if it's lacking 
+	(for the entire row or just some features)
+	The features must be sorted in the final order
 	"""
 
-	for i in range(0,len(multiple_features_list)):
-		for j in range(0,len(multiple_features_list[i])):
-			data[i].append(multiple_features_list[i][j])
+	count_of_data_elements = len(data)
+	count_of_features_elements = len(multiple_features_list[0])
+
+	for i in range(0,count_of_data_elements):
+
+		for j in range(0,count_of_features_elements):
+
+			if i < len(multiple_features_list):
+				if  j < len(multiple_features_list[i]):
+					data[i].append(multiple_features_list[i][j])
+				else:
+					data[i].append(default_value)
+			else:
+				data[i].append(default_value)
+
 
 	return data
 
@@ -65,7 +80,7 @@ def compute_hotkeys_distribution_feature(list_of_feature_list):
 		for feature in lists:
 
 			# We verify the element is a used hotkey 
-			if "hotkey" in feature and "2" in feature :
+			if "hotkey" in feature and feature.endswith("2"):
 				feature = feature [:-1]
 				if feature in hotkey_dic:
 					hotkey_dic[feature] = hotkey_dic[feature] + 1
@@ -126,25 +141,27 @@ def compute_repetition_pattern_of_hotkeys_feature():
 fieldnames = ["s","sBase","sMineral","hotkey00","hotkey01","hotkey02","hotkey10","hotkey11","hotkey12","hotkey20","hotkey21","hotkey22","hotkey30","hotkey31","hotkey32","hotkey40","hotkey41","hotkey42","hotkey50","hotkey51","hotkey52","hotkey60","hotkey61","hotkey62","hotkey70","hotkey71","hotkey72","hotkey80","hotkey81","hotkey82","hotkey90","hotkey91","hotkey92"]
 
 
-def calculate_simple_features(data):
+def calculate_simple_features(data, offset = 0):
+
+	"""
+	Doesn't compute speed anymore
+	"""
 	features = []
 	for game in data:
-		game_features = []
-		if game[0] == "Protoss": 
-			game_features.append(0)
-		elif game[0] == "Zerg": 
-			game_features.append(1)
-		else : 
-			game_features.append(2)
-		if len(game)>3:
-			game_features.append((int(game[-1]) - int(game[2]))/2*(len(game)-1))
-		else: 
-			game_features.append(0)
-		for field in fieldnames:
-			game_features.append(game.count(field))
-		features.append(game_features)
+		if game:
+			game_features = []
+			if game[0+offset] == "Protoss": 
+				game_features.append(0)
+			elif game[0+offset] == "Zerg": 
+				game_features.append(1)
+			else : 
+				game_features.append(2)
+			for field in fieldnames:
+				game_features.append(game.count(field))
+			features.append(game_features)
 	return features
 
 if __name__ == "__main__":
 
-	print compute_user_mean_speed_feature([["/Life/", "Zerg", 17, "s",18,	"s",21,	"s",22,	"hotkey50",	24,	"s",29,	"hotkey40",	30,	"hotkey52",	33]])
+	#print add_multiple_features([[0,10,12],[15,20,30]],[[45,64],[9]])
+	print compute_hotkeys_distribution_feature([["hotkey21", "hotkey22"], ["hotkey21", "hotkey20"], ["hotkey62", "hotkey92"]])

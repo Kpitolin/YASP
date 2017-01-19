@@ -1,4 +1,5 @@
 import csv
+import time
 from sklearn import tree
 import csvHandler
 # Handles all kinds of operations for CSV files
@@ -56,10 +57,14 @@ def generate_features_csv(labels, features):
 	 This method count the number of each specific action for every game and the speed of the player
 	 It creates a new csv
 	"""
-	with open('../../datayasp/train_count.csv', 'w') as csv_output:
+	with open('../../datayasp/train_count' + str(time.time())+'.csv', 'w') as csv_output:
 		writer = csv.writer(csv_output)
 		for i in range(len(labels)):
-			writer.writerow([labels[i]]+features[i])
+			if i < len(features):
+				writer.writerow([labels[i]]+features[i])
+			else:
+				writer.writerow([labels[i]])
+
 
 def write_to_submit_CSV(players,arrayOfResults):
 	"""
