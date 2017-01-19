@@ -78,25 +78,31 @@ def test_with_new_features(n_estimators_rf = 50):
 	X = raw_data
 
 
-	X_train, X_test, Y_train, Y_test = train_test_split(X,Y, test_size = 5, random_state=int(random.uniform(0,100)))
 
 	clf = RandomForestClassifier(n_estimators=n_estimators_rf)
-	clf = clf.fit(X_train, Y_train)
+	#clf = clf.fit(X, Y)
+
+
+
 	data_test = csvHandler.extract_rows_from_CSV('../../datayasp/test.csv')["data"]
 
 	data_labels = csvHandler.extract_rows_from_CSV('../../datayasp/test.csv')["labels"]
+	data_first_twenty_seconds_fl = csvHandler.extract_first_20_second_rows_from_data(data_test)
+	data_final = features.calculate_simple_features(data_first_twenty_seconds_fl)
+	features.add_multiple_features(data_final, features.compute_hotkeys_distribution_feature(data_test))
+	features.add_single_feature(data_final, features.extract_string_feature(data_test,"sBase"))
+	features.add_single_feature(data_final, features.extract_string_feature(data_test,"sMineral"))
+	features.add_single_feature(data_final, features.extract_race_feature(data_test))
+	features.add_single_feature(data_final, features.compute_user_mean_speed_feature(data_test))
+	
+	X_test = data_final
+	Y_test = data_labels
 
-	features_test = features.compute_hotkeys_distribution_feature(data_test)
-	features.add_single_feature(features_test, features.extract_string_feature(data_test,"sBase"))
-	features.add_single_feature(features_test, features.extract_string_feature(data_test,"sMineral"))
-	features.add_single_feature(features_test, features.extract_race_feature(data_test))
-	features.add_single_feature(features_test, features.compute_user_mean_speed_feature(data_test))
-	players_test = data_labels
-	predictions = clf.predict(X_test)
-	#write_to_submit_CSV(players_test,predictions)
-	#print f1_score(Y_test, predictions, labels=[x for x in range(0,400)], average= 'macro')
-	print "Accuracy: " + str(cross_val_score(clf,X_test,Y_test))
-	print "Jacquart: " + str(jaccard_similarity_score(Y_test, predictions))
+
+	print "Cross val: " + str(cross_val_score(clf,X_test,Y_test))
+	# predictions = clf.predict(X_test)
+
+	# print "Jacquart: " + str(jaccard_similarity_score(Y_test, predictions))
 
 
 
