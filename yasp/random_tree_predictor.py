@@ -42,8 +42,8 @@ def test_random_tree_by_race():
 	features_labels = extract_rows_from_CSV()
 	Y = features_labels["labels"]
 	X = calculate_simple_features(features_labels["data"])
-	compute_most_used_hotkey_feature(X)
-	compute_relative_frequency_hotkey_feature(X)
+	#compute_most_used_hotkey_feature(X)
+	#compute_relative_frequency_hotkey_feature(X)
 	generate_features_csv(Y,X)
 	clf = RandomForestClassifier(n_estimators=70)
 	predicted = cross_val_predict(clf, X, Y, cv=10)
