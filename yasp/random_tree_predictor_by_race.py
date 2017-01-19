@@ -62,5 +62,6 @@ def test_random_tree_by_race():
 		predict_race(x,dic,predictions)
 	print accuracy_score(Y_test, predictions)
 
+if __name__ == "__main__":
 
-test_random_tree_by_race()
+	test_random_tree_by_race()

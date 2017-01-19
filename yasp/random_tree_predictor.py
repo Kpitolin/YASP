@@ -50,4 +50,5 @@ def test_random_tree_by_race():
 	print metrics.accuracy_score(Y, predicted) 
 	
 
-test_random_tree_by_race()
+if __name__ == "__main__":
+	test_random_tree_by_race()
