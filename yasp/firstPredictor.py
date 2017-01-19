@@ -99,7 +99,7 @@ def test_with_new_features(n_estimators_rf = 50):
 	Y_test = data_labels
 
 
-	print "Cross val: " + str(cross_val_score(clf,X_test,Y_test))
+	print "Cross val: " + str(cross_val_score(clf,X_test,Y_test, cv=10))
 	# predictions = clf.predict(X_test)
 
 	# print "Jacquart: " + str(jaccard_similarity_score(Y_test, predictions))
