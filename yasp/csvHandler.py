@@ -5,7 +5,7 @@ import csvHandler
 
 fieldresults = ["row ID" , "battleneturl"]
 
-def extract_rows_from_CSV(filename = '../../datayasp/train.csv'):
+def extract_rows_from_CSV(filename = '../../datayasp/train.csv', filterIncompleteRows = True):
 	"""
 	Training CSV - > label_array:['gamer1','gamer2...]
 					data_array:[['s',17, ...]['sBase',456,...]
@@ -16,9 +16,10 @@ def extract_rows_from_CSV(filename = '../../datayasp/train.csv'):
 		reader = csv.reader(csvfile, delimiter=',')
 		next(reader, None)
 		for row in reader:
-			label_array.append(row[0].split(";")[0])
-			row[0] = row[0].split(";")[1]
-			data_array.append(row)
+			if (filterIncompleteRows and len(row) > 2) or not filterIncompleteRows:
+				label_array.append(row[0].split(";")[0])
+				row[0] = row[0].split(";")[1]
+				data_array.append(row)
 	return {"labels":label_array, "data":data_array}
 
 

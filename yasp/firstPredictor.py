@@ -4,6 +4,9 @@ from sklearn.model_selection import train_test_split
 from sklearn import tree
 import csvHandler
 import features
+import random_tree_predictor_by_race
+from sklearn.ensemble import RandomForestClassifier
+
 #from sklearn.cross_validation import train_test_split
 from sklearn.metrics import accuracy_score, jaccard_similarity_score, f1_score
 from sklearn.tree import DecisionTreeClassifier
@@ -11,7 +14,48 @@ fieldnames = ["s","sBase","sMineral","hotkey00","hotkey01","hotkey02","hotkey10"
 
 
 
-def test_with_new_features():
+
+
+def produce_new_test():
+
+	features_list = csvHandler.extract_rows_from_CSV()
+	data_hotkeys = features.compute_hotkeys_distribution_feature(features_list["data"])
+
+	features.add_single_feature(data_hotkeys, features.extract_string_feature(features_list["data"],"sBase"))
+	features.add_single_feature(data_hotkeys, features.extract_string_feature(features_list["data"],"sMineral"))
+	features.add_single_feature(data_hotkeys, features.extract_race_feature(features_list["data"]))
+	features.add_single_feature(data_hotkeys, features.compute_user_mean_speed_feature(features_list["data"]))
+
+
+	#features_labels = extract_rows_from_CSV()
+	Y = features_list["labels"]
+	X = data_hotkeys
+
+
+
+	clf = RandomForestClassifier(n_estimators=50)
+	clf = clf.fit(X, Y)
+
+
+	data_test = csvHandler.extract_rows_from_CSV('../../datayasp/test.csv')["data"]
+
+
+	data_labels = csvHandler.extract_rows_from_CSV('../../datayasp/test.csv')["labels"]
+
+	features_test = features.compute_hotkeys_distribution_feature(data_test)
+	features.add_single_feature(features_test, features.extract_string_feature(data_test,"sBase"))
+	features.add_single_feature(features_test, features.extract_string_feature(data_test,"sMineral"))
+	features.add_single_feature(features_test, features.extract_race_feature(data_test))
+	features.add_single_feature(features_test, features.compute_user_mean_speed_feature(data_test))
+	X_test = features_test
+	Y_test = data_labels
+	predictions = clf.predict(X_test)
+
+	csvHandler.write_to_submit_CSV(Y_test,predictions)
+
+	
+
+def test_with_new_features(n_estimators_rf = 50):
 
 
 	features_list = csvHandler.extract_rows_from_CSV()
@@ -30,7 +74,7 @@ def test_with_new_features():
 
 	X_train, X_test, Y_train, Y_test = train_test_split(X,Y, test_size = 5, random_state=int(random.uniform(0,100)))
 
-	clf = tree.DecisionTreeClassifier()
+	clf = RandomForestClassifier(n_estimators=n_estimators_rf)
 	clf = clf.fit(X_train, Y_train)
 	data_test = csvHandler.extract_rows_from_CSV('../../datayasp/train.csv')["data"][:400]
 
@@ -46,7 +90,7 @@ def test_with_new_features():
 	predictions = clf.predict(X_test)
 	#write_to_submit_CSV(players_test,predictions)
 	#print f1_score(Y_test, predictions, labels=[x for x in range(0,400)], average= 'macro')
-	# print accuracy_score(Y_test, predictions)
+	#print accuracy_score(Y_test, predictions)
 	print jaccard_similarity_score(Y_test, predictions)
 
 
@@ -72,16 +116,20 @@ def test_with_classic_features():
 	predictions = clf.predict(X_test)
 	#write_to_submit_CSV(players_test,predictions)
 	#print f1_score(Y_test, predictions, labels=[x for x in range(0,400)], average= 'macro')
-	# print accuracy_score(Y_test, predictions)
-	print jaccard_similarity_score(Y_test, predictions)
+	print accuracy_score(Y_test, predictions)
+	# print jaccard_similarity_score(Y_test, predictions)
 
 
 if __name__ == "__main__":
-
-	print "Classic"
-	test_with_classic_features()
-	print "New"
-	test_with_new_features()
+	# produce_new_test()
+	# print "Classic"
+	# test_with_classic_features()
+	print "New 50"
+	test_with_new_features(50)	
+	print "New 80"
+	test_with_new_features(80)
+	print "random_tree_predictor_by_race"
+	random_tree_predictor_by_race.test_random_tree_by_race()
 	# features_list = csvHandler.extract_rows_from_CSV()
 
 	# features.compute_user_mean_speed_feature(features_list["data"])
