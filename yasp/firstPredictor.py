@@ -67,7 +67,7 @@ def test_with_new_features(n_estimators_rf = 50):
 	raw_data = features.old_compute_simple_features(first_twenty_seconds_fl)
 	features.add_multiple_features(raw_data, features.compute_hotkeys_distribution_feature(features_list["data"]))
 
-	features.add_single_feature(raw_data, features.extract_string_feature_in_interval(features_list["data"],"s",1,4))
+	features.add_single_feature(raw_data, features.extract_string_feature_in_interval(features_list["data"],"s",1,4)) # pb here
 	features.add_single_feature(raw_data, features.extract_string_feature(features_list["data"],"sBase"))
 	features.add_single_feature(raw_data, features.extract_string_feature(features_list["data"],"sMineral"))
 	features.add_single_feature(raw_data, features.extract_race_feature(features_list["data"]))
@@ -76,7 +76,6 @@ def test_with_new_features(n_estimators_rf = 50):
 	Y = features_list["labels"]
 	X = raw_data
 
-	print X
 	clf = RandomForestClassifier(n_estimators=n_estimators_rf)
 	clf = clf.fit(X, Y)
 
