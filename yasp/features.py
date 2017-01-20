@@ -17,6 +17,37 @@ def extract_race_feature(raw_features):
 
 	return feature_list
 
+def extract_coordination_feature(raw_features, min_distance_hotkeys = 6):
+	"""
+	You must provide it with extract_rows_from_CSV()["data"]
+	"""
+
+	feature_list = []
+	for i in range(0,len(raw_features)):
+		duration_list = []
+
+		for j in range(0,len(raw_features[i])):
+			# Take the second to be last char
+			first_hotkey = 0
+			last_hotkey  = 0
+			if "hotkey" in raw_features[i][j] and "hotkey" in raw_features[i][j-2]:
+				last_hotkey = int(raw_features[i][j][-2])
+				first_hotkey = int(raw_features[i][j-2][-2])
+
+				if last_hotkey-first_hotkey > min_distance_hotkeys:
+					first_frame = int(raw_features[i][j-1]) * 30
+					last_frame = int(raw_features[i][j+1]) * 30
+					duration_list.append(last_frame - first_frame) 
+		if duration_list:
+			feature_list.append(min(duration_list))
+		else:
+			feature_list.append(0)
+
+
+				
+
+	return feature_list
+
 def add_single_feature(data, single_feature_list):
 	"""
 	Add a feature  [valueGameData1, valueGameData2,...] to the list of features

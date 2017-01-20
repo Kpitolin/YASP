@@ -114,12 +114,10 @@ if __name__ == "__main__":
 	# produce_new_test(65)
 	# print "Classic"
 	# test_with_classic_features()
-	print "New 65"
-	test_with_new_features(65)	
+	# print "New 65"
+	# test_with_new_features(65)	
 
 	# print "random_tree_predictor_by_race"
 	# random_tree_predictor_by_race.test_random_tree_by_race()
-	# features_list = csvHandler.extract_rows_from_CSV()
-
-
-	# features.compute_user_mean_speed_feature(features_list["data"])
+	features_list = csvHandler.extract_rows_from_CSV()
+	print features.extract_coordination_feature(features_list["data"])
