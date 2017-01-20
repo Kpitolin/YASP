@@ -21,31 +21,30 @@ fieldnames = ["s","sBase","sMineral","hotkey00","hotkey01","hotkey02","hotkey10"
 def produce_new_test(n_estimators_rf=50):
 
 	features_list = csvHandler.extract_rows_from_CSV()
-	data_hotkeys = features.compute_hotkeys_distribution_feature(features_list["data"])
+	first_twenty_seconds_fl = csvHandler.extract_first_20_second_rows_from_data(features_list["data"])
+	# raw_data = features.old_compute_simple_features(features_list["data"])
+	raw_data = features.old_compute_simple_features(first_twenty_seconds_fl)
+	features.add_multiple_features(raw_data, features.compute_hotkeys_distribution_feature(features_list["data"]))
 
+	features.add_single_feature(raw_data, features.extract_string_feature(features_list["data"],"sBase"))
+	features.add_single_feature(raw_data, features.extract_string_feature(features_list["data"],"sMineral"))
+	features.add_single_feature(raw_data, features.extract_race_feature(features_list["data"]))
+	features.add_single_feature(raw_data, features.compute_user_mean_speed_feature(features_list["data"]))
 
-	features.add_single_feature(data_hotkeys, features.extract_string_feature(features_list["data"],"sBase"))
-	features.add_single_feature(data_hotkeys, features.extract_string_feature(features_list["data"],"sMineral"))
-	features.add_single_feature(data_hotkeys, features.extract_race_feature(features_list["data"]))
-	features.add_single_feature(data_hotkeys, features.compute_user_mean_speed_feature(features_list["data"]))
-
-
-	#features_labels = extract_rows_from_CSV()
 	Y = features_list["labels"]
-	X = data_hotkeys
-
+	X = raw_data
 
 
 	clf = RandomForestClassifier(n_estimators=n_estimators_rf)
 	clf = clf.fit(X, Y)
 
 
-	data_test = csvHandler.extract_rows_from_CSV('../../datayasp/test.csv')["data"]
+	data_test = csvHandler.extract_rows_from_CSV('../../datayasp/test.csv', False)["data"]
+	data_labels = csvHandler.extract_rows_from_CSV('../../datayasp/test.csv',False)["labels"]
+	first_twenty_seconds_fl = csvHandler.extract_first_20_second_rows_from_data(data_test)
 
-
-	data_labels = csvHandler.extract_rows_from_CSV('../../datayasp/test.csv')["labels"]
-
-	features_test = features.compute_hotkeys_distribution_feature(data_test)
+	features_test = features.old_compute_simple_features(first_twenty_seconds_fl)
+	features.add_multiple_features(features_test, features.compute_hotkeys_distribution_feature(data_test))
 	features.add_single_feature(features_test, features.extract_string_feature(data_test,"sBase"))
 	features.add_single_feature(features_test, features.extract_string_feature(data_test,"sMineral"))
 	features.add_single_feature(features_test, features.extract_race_feature(data_test))
@@ -64,20 +63,20 @@ def test_with_new_features(n_estimators_rf = 50):
 
 	features_list = csvHandler.extract_rows_from_CSV()
 	first_twenty_seconds_fl = csvHandler.extract_first_20_second_rows_from_data(features_list["data"])
+	# raw_data = features.old_compute_simple_features(features_list["data"])
 	raw_data = features.old_compute_simple_features(first_twenty_seconds_fl)
 	features.add_multiple_features(raw_data, features.compute_hotkeys_distribution_feature(features_list["data"]))
 
+	features.add_single_feature(raw_data, features.extract_string_feature_in_interval(features_list["data"],"s",1,4))
 	features.add_single_feature(raw_data, features.extract_string_feature(features_list["data"],"sBase"))
 	features.add_single_feature(raw_data, features.extract_string_feature(features_list["data"],"sMineral"))
-	# features.add_single_feature(raw_data, features.extract_race_feature(features_list["data"]))
+	features.add_single_feature(raw_data, features.extract_race_feature(features_list["data"]))
 	features.add_single_feature(raw_data, features.compute_user_mean_speed_feature(features_list["data"]))
 
-
-	#features_labels = extract_rows_from_CSV()
 	Y = features_list["labels"]
 	X = raw_data
 
-
+	print X
 	clf = RandomForestClassifier(n_estimators=n_estimators_rf)
 	clf = clf.fit(X, Y)
 
@@ -113,13 +112,12 @@ def test_with_classic_features():
 
 
 if __name__ == "__main__":
-	# produce_new_test()
+	# produce_new_test(65)
 	# print "Classic"
 	# test_with_classic_features()
-	print "New 80"
-	test_with_new_features(80)	
-	print "New 75"
-	test_with_new_features(75)
+	print "New 65"
+	test_with_new_features(65)	
+
 	# print "random_tree_predictor_by_race"
 	# random_tree_predictor_by_race.test_random_tree_by_race()
 	# features_list = csvHandler.extract_rows_from_CSV()

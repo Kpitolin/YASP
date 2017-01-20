@@ -29,6 +29,51 @@ def extract_first_20_second_rows_from_data(raw_data):
 			
 	return data_array
 
+
+
+def extract_same_prop_each_user_from_data(filename = '../../datayasp/train.csv', filterIncompleteRows = True):
+	"""
+	Takes extract_rows_from_CSV()["data"] in input
+	"""
+
+	label_array  = []
+	data_array  = []
+
+	name_count = 0
+	name_dic = {}
+
+	with open(filename) as csvfile:
+		reader = csv.reader(csvfile, delimiter=',')
+		next(reader, None)
+		for row in reader:
+			if (filterIncompleteRows and len(row) > 2) or not filterIncompleteRows:
+				if row[0].split(";")[0] in name_dic:
+					name_dic[row[0].split(";")[0]] = name_dic[row[0].split(";")[0]] + 1
+				else:
+					name_dic[row[0].split(";")[0]] = 1
+
+	max_number_of_occurences = min(name_dic.values())
+
+	regulated_name_occurence_dic = dict.fromkeys(name_dic.keys(), max_number_of_occurences)
+
+	with open(filename) as csvfile:
+		reader = csv.reader(csvfile, delimiter=',')
+		next(reader, None)
+		for row in reader:
+			if (filterIncompleteRows and len(row) > 2) or not filterIncompleteRows:
+				if regulated_name_occurence_dic[row[0].split(";")[0]] > 0:
+					regulated_name_occurence_dic[row[0].split(";")[0]] = regulated_name_occurence_dic[row[0].split(";")[0]] - 1
+					label_array.append(row[0].split(";")[0])
+					row[0] = row[0].split(";")[1]
+					data_array.append(row)
+				else:
+					next(reader, None)
+
+	return {"labels":label_array, "data":data_array}
+
+
+
+
 def extract_rows_from_CSV(filename = '../../datayasp/train.csv', filterIncompleteRows = True):
 	"""
 	Training CSV - > label_array:['gamer1','gamer2...]
@@ -87,7 +132,7 @@ if __name__ == "__main__":
 	# print extractLabels(extractRowsFromCSV())	testArray = [["row ID","battleneturl"], ["Row 0", "Patrick"], ["Row 1", "Bernard"], ["Row 2", "Jean"]]
 	# truthArray = [["row ID","battleneturl"], ["Row 0", "Patrick"], ["Row 1", "Patrick"], ["Row 2", "Jean"],["Row 3", "Bernard"]]
 	# print computePrecisionAndRecall(testArray, truthArray)
-	labels_features = extract_rows_from_CSV()
-	generate_features_csv(labels_features["label"], labels_features["data"])
-
+	# labels_features = extract_rows_from_CSV()
+	# generate_features_csv(labels_features["label"], labels_features["data"])
+	print str(extract_same_prop_each_user_from_data()["labels"])
 

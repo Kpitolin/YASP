@@ -52,6 +52,25 @@ def add_multiple_features(data, multiple_features_list, default_value = 0):
 
 	return data
 
+def extract_string_feature_in_interval(data_list, string_feature, first_action_index, nb_actions):
+	"""
+	You must provide extract_rows_from_CSV()["data"] as data_list 
+	string_feature is s or sBase or sMineral or a hotkey
+	"""
+	
+	feature_list = []
+	for i in range(0,len(data_list)):
+		count_of_features = 0
+		if first_action_index + (nb_actions-1)*2 < len(data_list[i]):
+			for j in range(first_action_index,(first_action_index+(nb_actions-1)*2)+1):
+				if string_feature == data_list[i][j]:
+					count_of_features = count_of_features + 1
+			feature_list.append(count_of_features)
+				# print feature_list
+	return feature_list
+
+
+
 def extract_string_feature(data_list, string_feature):
 	"""
 	You must provide extract_rows_from_CSV()["data"] as data_list 
@@ -228,4 +247,5 @@ def add_line_number(features):
 if __name__ == "__main__":
 
 	#print add_multiple_features([[0,10,12],[15,20,30]],[[45,64],[9]])
-	print compute_hotkeys_distribution_feature([["hotkey21", "hotkey22"], ["hotkey21", "hotkey20"], ["hotkey62", "hotkey92"]])
+	# print compute_hotkeys_distribution_feature([["hotkey21", "hotkey22"], ["hotkey21", "hotkey20"], ["hotkey62", "hotkey92"]])
+	print extract_string_feature_in_interval([[ 's', '6256', 's', '6281', 's', '6289', 'hotkey12', '6332', 's', '6343', 's', '6354', 's', '6385', 's', '6438', 's', '6447', 'hotkey10', '6450', 'hotkey62', '6455', 's', '6472', 's', '6486', 'hotkey20', '6492', 'hotkey12', '6514', 'hotkey22', '6565', 'hotkey12', '6610', 's', '6647', 'hotkey12', '6672', 'hotkey62', '6697']],"s",0,9)
