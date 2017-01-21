@@ -1,5 +1,7 @@
 import math
 import functools
+
+
 def extract_race_feature(raw_features):
 	"""
 	You must provide it with extract_rows_from_CSV()["data"]
@@ -96,7 +98,7 @@ def extract_string_feature_in_interval(data_list, string_feature, first_action_i
 			for j in range(first_action_index,(first_action_index+(nb_actions-1)*2)+1):
 				if string_feature == data_list[i][j]:
 					count_of_features = count_of_features + 1
-			feature_list.append(count_of_features)
+		feature_list.append(count_of_features)
 				# print feature_list
 	return feature_list
 
@@ -161,7 +163,7 @@ def findIndexOfFirstFrame(game_feature_list):
 	If the first frame is found, it resturns its index, otherwise, -1
 	"""
 	for i in range(len(game_feature_list)):
-		if isinstance(game_feature_list[i], int):
+		if game_feature_list[i].isdigit():
 			return i
 
 	return -1
@@ -178,26 +180,19 @@ def compute_user_mean_speed_feature(raw_features):
 
 	for feature_list in raw_features:
 		index_first_frame = findIndexOfFirstFrame(feature_list)
-
 		if len(feature_list)>2 and not index_first_frame == -1:
-			features.append((int(feature_list[-1]) - int(feature_list[index_first_frame]))/2*(len(feature_list)-1))
+			features.append((2*(len(feature_list)-1) * 30) / (int(feature_list[-1]) - int(feature_list[index_first_frame])))
 		else:
 			features.append(0)
 
 	return features
 
 
-def compute_repetition_pattern_of_hotkeys_feature():
-	"""
-	Repetition pattern of hotkeys
-	"""
-	return
+
 
 
 def compute_most_used_hotkey_feature(features):
-	"""
-	Repetition pattern of hotkeys
-	"""
+
 	for game in features:
 		hotkey = 0
 		max_usage =0
@@ -210,9 +205,6 @@ def compute_most_used_hotkey_feature(features):
 
 
 def compute_relative_frequency_hotkey_feature(features):
-	"""
-	Repetition pattern of hotkeys
-	"""
 
 	for game in features:
 		sum = reduce((lambda x, y: x + y), game[7::3])
@@ -260,10 +252,6 @@ def old_compute_simple_features(data):
 			game_features.append(1)
 		else : 
 			game_features.append(2)
-		if len(game)>3:
-			game_features.append((int(game[-1]) - int(game[2]))/2*(len(game)-1))
-		else: 
-			game_features.append(0)
 		for field in fieldnames:
 			game_features.append(game.count(field))
 		features.append(game_features)
@@ -278,5 +266,4 @@ def add_line_number(features):
 if __name__ == "__main__":
 
 	#print add_multiple_features([[0,10,12],[15,20,30]],[[45,64],[9]])
-	# print compute_hotkeys_distribution_feature([["hotkey21", "hotkey22"], ["hotkey21", "hotkey20"], ["hotkey62", "hotkey92"]])
-	print extract_string_feature_in_interval([[ 's', '6256', 's', '6281', 's', '6289', 'hotkey12', '6332', 's', '6343', 's', '6354', 's', '6385', 's', '6438', 's', '6447', 'hotkey10', '6450', 'hotkey62', '6455', 's', '6472', 's', '6486', 'hotkey20', '6492', 'hotkey12', '6514', 'hotkey22', '6565', 'hotkey12', '6610', 's', '6647', 'hotkey12', '6672', 'hotkey62', '6697']],"s",0,9)
+	print compute_hotkeys_distribution_feature([["hotkey21", "hotkey22"], ["hotkey21", "hotkey20"], ["hotkey62", "hotkey92"]])

@@ -131,7 +131,6 @@ if __name__ == "__main__":
 
 	# print extractLabels(extractRowsFromCSV())	testArray = [["row ID","battleneturl"], ["Row 0", "Patrick"], ["Row 1", "Bernard"], ["Row 2", "Jean"]]
 	# truthArray = [["row ID","battleneturl"], ["Row 0", "Patrick"], ["Row 1", "Patrick"], ["Row 2", "Jean"],["Row 3", "Bernard"]]
-	# print computePrecisionAndRecall(testArray, truthArray)
 	# labels_features = extract_rows_from_CSV()
 	# generate_features_csv(labels_features["label"], labels_features["data"])
 	print str(extract_same_prop_each_user_from_data()["labels"])
