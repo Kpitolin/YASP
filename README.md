@@ -70,6 +70,7 @@ Then, we add features we selected (by empirically adding and removing them from 
 #### Not selected
 - Used hotkeys relative frequency instead of distribution. It didn't seem to better have a significant effect.  
 - Most used hotkey : same diagnostic.
+
 ## Where could we go from here ?
 - We weren't able to use several tools like [recursive feature elimination with cross-validation](http://scikit-learn.org/stable/auto_examples/feature_selection/plot_rfe_with_cross_validation.html#sphx-glr-auto-examples-feature-selection-plot-rfe-with-cross-validation-py), [matplotlib](http://matplotlib.org) to have a real scientific approach to back our intuitions for the feature selection phase.    We didn't study features correlations either. That's what we'll try to address in the near future.
 - We had an idea of assigning a weight to each feature depending on its relevance on the prediction. That needs more digging up.
