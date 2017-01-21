@@ -4,7 +4,7 @@ Yet Another Simple Predictor.
 We implemented it to identify StarCraft 2 players from game data in a Kaggle in class competition. Our final score was **0.70801** using [F-measure](https://en.wikipedia.org/wiki/F1_score).
 ## Prerequisites
 
-*YASP is proudly powered by **Python 2.7***
+YASP is proudly powered by ***Python 2.7***
 
 You need those python modules in order to install YASP:
 
